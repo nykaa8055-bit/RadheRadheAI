@@ -1,127 +1,852 @@
-<!doctype html>
-<html lang="en">
+
+<!DOCTYPE html>
+<html lang="hi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#050914">
-<meta name="description" content="Radhe Radhe personal voice assistant">
-<link rel="manifest" href="./manifest.json">
-<title>Radhe Radhe AI</title>
-<style>
-:root{--bg:#050914;--panel:#0b1427;--cyan:#54e8ff;--blue:#3978ff;--text:#edf7ff;--muted:#92a8c7}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 35%,#102b57 0%,#071225 38%,var(--bg) 75%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;display:flex;justify-content:center}
-.app{width:min(100%,600px);min-height:100vh;padding:22px 18px calc(28px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center}
-.top{width:100%;display:flex;justify-content:space-between;align-items:center}.brand{font-size:12px;letter-spacing:3px;color:var(--cyan);font-weight:800}.status{font-size:12px;color:var(--muted);border:1px solid #23406b;border-radius:20px;padding:7px 10px}
-h1{font-size:clamp(25px,6vw,36px);letter-spacing:2px;margin:28px 0 2px;text-align:center}.sub{font-size:13px;color:var(--muted);text-align:center}
-.orb-wrap{margin:30px 0 20px;position:relative;width:230px;height:230px;display:grid;place-items:center}
-.ring{position:absolute;border-radius:50%;border:1px solid #2f9dff55;box-shadow:0 0 22px #197aff22,inset 0 0 22px #197aff18}.ring.one{inset:0;animation:spin 12s linear infinite;border-top-color:var(--cyan)}.ring.two{inset:18px;border-style:dashed;animation:spin 18s linear infinite reverse}.orb{width:142px;height:142px;border-radius:50%;background:radial-gradient(circle at 35% 25%,#b5fbff,#39c9ff 15%,#1762d8 42%,#081a43 73%);box-shadow:0 0 24px #26bfff,0 0 70px #147aff99,inset -12px -15px 28px #020b27;position:relative}.orb:after{content:"";position:absolute;inset:15px;border-radius:50%;border:1px solid #d5ffff88;box-shadow:inset 0 0 22px #7af7ff88}.listening .orb{animation:pulse 1s ease-in-out infinite}
-@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.06);box-shadow:0 0 42px #26e7ff,0 0 100px #147aff}}
-.mainbtn{width:100%;max-width:360px;border:1px solid #67eaff;background:linear-gradient(110deg,#124eb8,#087d9d);color:white;border-radius:16px;padding:15px 18px;font-weight:800;font-size:16px;letter-spacing:.4px;box-shadow:0 8px 30px #006cff35;cursor:pointer}.mainbtn:active{transform:scale(.99)}
-.row{display:flex;gap:9px;width:100%;max-width:460px;margin-top:10px}.row button{flex:1;background:#0d1a31;border:1px solid #263d63;color:var(--text);border-radius:12px;padding:11px 8px;cursor:pointer}
-.transcript{width:100%;max-width:460px;margin-top:20px;background:#091326cc;border:1px solid #1d365c;border-radius:16px;padding:14px;min-height:82px}.label{font-size:11px;letter-spacing:1.5px;color:var(--cyan);text-transform:uppercase}.message{font-size:14px;line-height:1.5;margin-top:7px;white-space:pre-wrap;overflow-wrap:anywhere}
-.chatrow{display:flex;gap:8px;width:100%;max-width:460px;margin-top:12px}.chatrow input{flex:1;min-width:0;background:#081225;border:1px solid #294366;border-radius:12px;padding:13px;color:white;font-size:14px}.chatrow button{border:0;background:#2475ee;color:white;border-radius:12px;padding:0 16px;font-weight:700}
-.note{font-size:11px;color:#7186a6;line-height:1.5;text-align:center;max-width:450px;margin:15px 0}
-details{width:100%;max-width:460px;margin-top:8px;background:#091326;border:1px solid #1d365c;border-radius:14px;padding:13px}summary{cursor:pointer;color:#b8d8ff;font-size:13px;font-weight:700}details p,details label{font-size:12px;color:var(--muted);line-height:1.5}details input{width:100%;background:#050b17;border:1px solid #294366;border-radius:8px;color:white;padding:10px;margin:5px 0 9px}details button{background:#17376c;color:white;border:1px solid #3868a8;border-radius:8px;padding:9px 12px}
-.footer{margin-top:auto;padding-top:25px;color:#506789;font-size:10px;letter-spacing:1px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050b1d">
+  <title>Radhe Radhe AI</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    :root {
+      --bg: #050b1d;
+      --panel: #0c1730;
+      --blue: #27b9ff;
+      --cyan: #70e8ff;
+      --text: #eff8ff;
+      --muted: #8ba6c5;
+      --border: rgba(89, 190, 255, .22);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% 12%, #102d61 0%, transparent 38%),
+        linear-gradient(155deg, #030714, #07152e 55%, #020611);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    button, input, textarea { font: inherit; }
+
+    .app {
+      max-width: 760px;
+      margin: auto;
+      padding: 24px 16px 40px;
+    }
+
+    header { text-align: center; }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 11px;
+      letter-spacing: 4px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 8px 0 4px;
+      font-size: clamp(28px, 7vw, 42px);
+      letter-spacing: 3px;
+      text-shadow: 0 0 24px #188cff80;
+    }
+
+    .subtitle { color: var(--muted); font-size: 13px; }
+
+    .orb-area {
+      height: 245px;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .orb {
+      width: 156px;
+      height: 156px;
+      border-radius: 50%;
+      position: relative;
+      background:
+        radial-gradient(circle at 34% 27%, #e6ffff 0%, #75efff 5%,
+        #16b9ff 19%, #1263e9 43%, #10175b 68%, #04091b 78%);
+      box-shadow:
+        0 0 22px #13baff,
+        0 0 58px #087dff99,
+        inset -15px -16px 28px #020617,
+        inset 9px 8px 22px #a9ffff90;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .orb::before, .orb::after {
+      content: "";
+      position: absolute;
+      inset: -17px;
+      border: 1px solid #55d9ff75;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #168fff30;
+      animation: rotate 12s linear infinite;
+    }
+
+    .orb::after {
+      inset: -29px;
+      border-color: #338dff45;
+      animation-direction: reverse;
+      animation-duration: 17s;
+    }
+
+    .orb.listening {
+      animation: pulse .8s ease-in-out infinite alternate;
+      box-shadow: 0 0 35px #43eeff, 0 0 100px #087dff;
+    }
+
+    @keyframes float {
+      50% { transform: translateY(-9px); }
+    }
+
+    @keyframes rotate { to { transform: rotate(360deg); } }
+
+    @keyframes pulse {
+      to { transform: scale(1.08); filter: brightness(1.35); }
+    }
+
+    .status {
+      text-align: center;
+      margin-top: -6px;
+      color: var(--cyan);
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: 800;
+    }
+
+    .hint {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin: 8px 0 18px;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, #0d1a35ed, #081226f2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin: 14px 0;
+      box-shadow: 0 10px 30px #00000020;
+    }
+
+    .panel h2 {
+      font-size: 14px;
+      margin: 0 0 12px;
+      color: var(--cyan);
+      letter-spacing: .5px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    button {
+      border: 1px solid var(--border);
+      background: #11284a;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 10px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    button:active { transform: scale(.98); }
+
+    button.primary {
+      color: #00101c;
+      background: linear-gradient(100deg, #67e6ff, #269cff);
+      border: 0;
+      font-weight: 800;
+      box-shadow: 0 0 20px #219fff35;
+    }
+
+    button.danger { border-color: #ff658055; }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    input, textarea {
+      width: 100%;
+      color: var(--text);
+      background: #050c1b;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      outline: none;
+    }
+
+    input:focus, textarea:focus { border-color: var(--blue); }
+
+    textarea {
+      resize: vertical;
+      min-height: 75px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .message {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      background: #061023;
+      border: 1px solid #193354;
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 45px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 11px;
+      margin: 12px 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    details summary {
+      color: var(--cyan);
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    details[open] summary { margin-bottom: 14px; }
+
+    .field { margin: 12px 0; }
+
+    .field label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .footer {
+      text-align: center;
+      color: #7088a8;
+      font-size: 11px;
+      margin-top: 22px;
+    }
+
+    @media (max-width: 420px) {
+      .app { padding: 20px 12px 32px; }
+      .orb-area { height: 220px; }
+      .orb { width: 135px; height: 135px; }
+      .panel { padding: 13px; }
+    }
+  </style>
 </head>
+
 <body>
-<main class="app" id="app">
-  <div class="top"><div class="brand">PERSONAL AI · v1</div><div class="status" id="status">● READY</div></div>
-  <h1>RADHE RADHE</h1><div class="sub">Your personal voice assistant</div>
-  <div class="orb-wrap" id="orbWrap"><div class="ring one"></div><div class="ring two"></div><div class="orb"></div></div>
-  <button class="mainbtn" id="listenBtn">🎙️  TAP TO SPEAK</button>
-  <div class="row"><button id="speakGreeting">🙏 Radhe Radhe</button><button id="helpBtn">⌘ Commands</button><button id="installBtn" hidden>＋ Install App</button></div>
-  <section class="transcript"><div class="label">You said</div><div class="message" id="heard">Tap the microphone and speak in Hindi or Hinglish.</div></section>
-  <section class="transcript"><div class="label">Assistant</div><div class="message" id="answer">Radhe Radhe! Main taiyaar hoon. Mic button dabakar baat shuru karein.</div></section>
-  <div class="chatrow"><input id="textInput" placeholder="Yahan apna command likhein…" autocomplete="off"><button id="sendBtn">Send</button></div>
-  <details><summary>AI setup (optional)</summary>
-    <p>AI replies require an API key from a compatible provider. API usage may cost money. Do not share your key with anyone. This demo stores the key only in this browser on this device; avoid using it on shared devices.</p>
-    <label for="apiUrl">API endpoint</label><input id="apiUrl" value="https://api.deepseek.com/chat/completions">
-    <label for="apiKey">API key</label><input id="apiKey" type="password" placeholder="Paste your API key (optional)">
-    <label for="model">Model name</label><input id="model" value="deepseek-chat">
-    <button id="saveSettings">Save settings on this device</button>
-    <p id="settingsStatus">Without an API key, basic commands still work.</p>
-  </details>
-  <p class="note">Voice recognition availability depends on browser/device and internet. This page does not continuously listen in the background. Phone actions may open websites/apps only where Android permits.</p>
-  <div class="footer">MADE FOR YOUR EVERYDAY TASKS · RADHE RADHE</div>
-</main>
-<script>
-const $=id=>document.getElementById(id);
-let recognition=null, listening=false, deferredPrompt=null;
-const defaultAnswer="Radhe Radhe! Main aapki madad ke liye taiyaar hoon.";
-function setStatus(s){$("status").textContent="● "+s.toUpperCase()}
-function say(text){
-  $("answer").textContent=text;
-  if(!("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang="hi-IN"; u.rate=0.96; u.pitch=1.02;
-  const voices=window.speechSynthesis.getVoices();
-  const hindi=voices.find(v=>/hi-IN|Hindi/i.test(v.lang+" "+v.name));
-  if(hindi)u.voice=hindi;
-  window.speechSynthesis.speak(u);
-}
-function openUrl(url){window.open(url,"_blank","noopener,noreferrer")}
-function basicCommand(raw){
-  const q=raw.toLowerCase().trim();
-  if(!q)return "Bhai, command sunai nahi diya. Dobara boliye.";
-  if(q.includes("radhe radhe") && q.length<18)return "Radhe Radhe! Bataiye, main kya karun?";
-  if(q.includes("youtube")){openUrl("https://www.youtube.com/");return "YouTube khol raha hoon."}
-  if(q.includes("google")||q.includes("search")||q.includes("dhundo")||q.includes("dhoondo")){
-    const term=q.replace(/radhe radhe|google par|google|search karo|search|dhundo|dhoondo|please/g,"").trim();
-    if(term){openUrl("https://www.google.com/search?q="+encodeURIComponent(term));return "Google par search khol raha hoon: "+term}
-    openUrl("https://www.google.com/");return "Google khol raha hoon."
-  }
-  if(q.includes("whatsapp")){openUrl("https://web.whatsapp.com/");return "WhatsApp Web khol raha hoon."}
-  if(q.includes("time")||q.includes("samay")||q.includes("kitne baje"))return "Abhi samay hai "+new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})+".";
-  if(q.includes("date")||q.includes("tarikh")||q.includes("aaj ki date"))return "Aaj ki tareekh hai "+new Date().toLocaleDateString("hi-IN",{day:"numeric",month:"long",year:"numeric"})+".";
-  if(q.includes("help")||q.includes("command"))return "Aap bol sakte hain: YouTube kholo, Google par weather search karo, WhatsApp kholo, samay batao, ya AI setup karke mujhse sawal poochho.";
-  return null;
-}
-async function askAI(prompt){
-  const key=$("apiKey").value.trim(), endpoint=$("apiUrl").value.trim(), model=$("model").value.trim()||"deepseek-chat";
-  if(!key)return null;
-  if(!endpoint.startsWith("https://"))throw new Error("API endpoint HTTPS hona chahiye.");
-  const response=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+key},body:JSON.stringify({model,temperature:0.6,messages:[{role:"system",content:"You are Radhe Radhe, a helpful personal voice assistant. Reply in simple Hindi/Hinglish unless the user asks otherwise. Keep spoken answers concise. You cannot claim to perform phone actions unless the app actually did them."},{role:"user",content:prompt}]})});
-  const data=await response.json();
-  if(!response.ok)throw new Error(data.error?.message||("API error "+response.status));
-  return data.choices?.[0]?.message?.content||"AI se jawab nahi mila.";
-}
-async function handleCommand(raw){
-  $("heard").textContent=raw; setStatus("thinking");
-  const basic=basicCommand(raw);
-  if(basic){say(basic);setStatus("ready");return}
-  try{
-    const reply=await askAI(raw);
-    if(reply){say(reply);setStatus("ready");return}
-    say("Is command ke liye AI setup mein API key add karein. Filhaal YouTube, Google search, WhatsApp Web, time aur date jaise basic commands kaam karte hain.");
-  }catch(e){say("AI connection mein problem hai: "+e.message+". API settings check karein.");}
-  setStatus("ready");
-}
-function startListening(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){say("Is browser mein voice recognition supported nahi hai. Android Chrome mein kholkar try karein, ya neeche command type karein.");return}
-  if(listening){try{recognition.stop()}catch(e){}return}
-  recognition=new SR();recognition.lang="hi-IN";recognition.interimResults=false;recognition.maxAlternatives=1;
-  recognition.onstart=()=>{listening=true;$("orbWrap").classList.add("listening");$("listenBtn").textContent="🔵  SUN RAHA HOON…";setStatus("listening")};
-  recognition.onresult=e=>{const text=e.results[0][0].transcript;handleCommand(text)};
-  recognition.onerror=e=>{setStatus("ready");$("answer").textContent="Mic issue: "+e.error+". Microphone permission aur internet check karein."};
-  recognition.onend=()=>{listening=false;$("orbWrap").classList.remove("listening");$("listenBtn").textContent="🎙️  TAP TO SPEAK";if($("status").textContent.includes("LISTENING"))setStatus("ready")};
-  try{recognition.start()}catch(e){say("Microphone start nahi hua. Dobara try karein.")}
-}
-$("listenBtn").addEventListener("click",startListening);
-$("speakGreeting").addEventListener("click",()=>say("Radhe Radhe! Main aapka personal assistant hoon. Mic dabakar apna command boliye."));
-$("helpBtn").addEventListener("click",()=>say("Aap bol sakte hain: YouTube kholo, Google par koi cheez search karo, WhatsApp kholo, samay ya tareekh batao. AI sawalon ke liye API key setup karein."));
-$("sendBtn").addEventListener("click",()=>{const v=$("textInput").value.trim();if(v){$("textInput").value="";handleCommand(v)}});
-$("textInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("sendBtn").click()});
-$("saveSettings").addEventListener("click",()=>{localStorage.setItem("rr_api_url",$("apiUrl").value.trim());localStorage.setItem("rr_api_key",$("apiKey").value.trim());localStorage.setItem("rr_model",$("model").value.trim());$("settingsStatus").textContent="Settings is browser mein save ho gayi.";});
-$("apiUrl").value=localStorage.getItem("rr_api_url")||$("apiUrl").value;
-$("apiKey").value=localStorage.getItem("rr_api_key")||"";
-$("model").value=localStorage.getItem("rr_model")||$("model").value;
-window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("installBtn").hidden=false});
-$("installBtn").addEventListener("click",async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$("installBtn").hidden=true}else say("Browser menu se Add to Home screen select karein.")});
-if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
-</script>
+  <main class="app">
+    <header>
+      <div class="eyebrow">PERSONAL AI ASSISTANT</div>
+      <h1>RADHE RADHE</h1>
+      <div class="subtitle">Your personal voice assistant</div>
+    </header>
+
+    <section class="orb-area" aria-label="Assistant animation">
+      <div class="orb" id="orb"></div>
+    </section>
+
+    <div class="status" id="status">SYSTEM READY</div>
+    <div class="hint" id="hint">Neeche microphone dabakar baat karein</div>
+
+    <section class="controls">
+      <button class="primary" id="micBtn">🎙️ Tap to Speak</button>
+      <button id="stopBtn">🔇 Stop Voice</button>
+      <button id="greetBtn">🙏 Radhe Radhe</button>
+      <button id="helpBtn">❔ Help / Commands</button>
+    </section>
+
+    <section class="panel">
+      <h2>💬 Talk to Radhe Radhe</h2>
+      <div class="input-row">
+        <input id="userInput" type="text"
+          placeholder="Apna sawaal yahan likhein..."
+          autocomplete="off">
+        <button class="primary" id="sendBtn">Send</button>
+      </div>
+
+      <div class="label">You said / Aapka command</div>
+      <div class="message" id="userMessage">Abhi koi command nahi.</div>
+
+      <div class="label">Assistant response / Jawab</div>
+      <div class="message" id="assistantMessage">
+        Radhe Radhe! Main aapki madad ke liye taiyaar hoon.
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>⚡ Quick Commands</h2>
+      <div class="controls">
+        <button data-command="Abhi kya time hua hai">🕒 Time</button>
+        <button data-command="Aaj ki date batao">📅 Date</button>
+        <button data-command="YouTube kholo">▶️ YouTube</button>
+        <button data-command="Google kholo">🔎 Google</button>
+        <button data-command="Mujhe kuch interesting batao">🧠 Ask AI</button>
+        <button data-command="Meri madad karo">📖 Help</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <details>
+        <summary>⚙️ AI Settings — DeepSeek API</summary>
+
+        <p class="small">
+          AI answers ke liye API key ki zaroorat hai. Apni key yahan enter
+          karein. Ye is browser ke local storage mein save hogi, GitHub
+          source code mein nahi. API provider usage ke paise charge kar sakta hai.
+        </p>
+
+        <div class="field">
+          <label for="apiUrl">API Endpoint</label>
+          <input id="apiUrl" type="url"
+            value="https://api.deepseek.com/chat/completions">
+        </div>
+
+        <div class="field">
+          <label for="model">Model</label>
+          <input id="model" type="text" value="deepseek-chat">
+        </div>
+
+        <div class="field">
+          <label for="apiKey">API Key</label>
+          <input id="apiKey" type="password"
+            placeholder="Apni API key yahan enter karein"
+            autocomplete="off">
+        </div>
+
+        <div class="controls">
+          <button class="primary" id="saveBtn">💾 Save Settings</button>
+          <button class="danger" id="clearBtn">🗑️ Clear Key</button>
+        </div>
+
+        <p class="small" id="settingsStatus">
+          API key set nahi hai to basic commands hi kaam karenge.
+        </p>
+      </details>
+    </section>
+
+    <section class="panel">
+      <h2>🔐 Privacy & Limitations</h2>
+      <p class="small">
+        Voice recognition ke liye browser microphone permission maangega.
+        AI sawaal configured API provider ko bheje jaate hain.
+        Public ya shared device par API key save na karein.
+        Ye version background wake-word listening aur unrestricted phone
+        control support nahi karta.
+      </p>
+    </section>
+
+    <div class="footer">
+      RADHE RADHE AI • Made for your OnePlus
+    </div>
+  </main>
+
+  <script>
+    "use strict";
+
+    const $ = id => document.getElementById(id);
+
+    const defaultAnswer =
+      "Radhe Radhe! Main aapki madad ke liye taiyaar hoon.";
+
+    const systemMessage = {
+      role: "system",
+      content:
+        "Tum Radhe Radhe ho, ek helpful personal voice assistant. " +
+        "Hamesha simple Hindi ya Hinglish mein jawab do, jab tak user " +
+        "koi doosri language na maange. Jawab friendly, practical aur " +
+        "bolkar sunane layak rakho. Phone par koi action kiya hai aisa " +
+        "claim mat karo jab tak sach mein na hua ho. Agar kisi action " +
+        "ki permission ya feature available nahi hai, to saaf batao."
+    };
+
+    let conversation = [systemMessage];
+    let recognition = null;
+    let isListening = false;
+    let isBusy = false;
+
+    // Settings load karein. API key sirf is browser mein rakhi jaati hai.
+    $("apiUrl").value =
+      localStorage.getItem("rr_api_url") ||
+      "https://api.deepseek.com/chat/completions";
+
+    $("model").value =
+      localStorage.getItem("rr_model") || "deepseek-chat";
+
+    $("apiKey").value = localStorage.getItem("rr_api_key") || "";
+
+    if ($("apiKey").value) {
+      $("settingsStatus").textContent =
+        "API key is browser mein saved hai.";
+    }
+
+    function setStatus(message, listening = false) {
+      $("status").textContent = message.toUpperCase();
+      $("orb").classList.toggle("listening", listening);
+    }
+
+    function speak(text) {
+      if (!("speechSynthesis" in window)) return;
+
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "hi-IN";
+      utterance.rate = 1;
+      utterance.pitch = 1;
+
+      const voices = window.speechSynthesis.getVoices();
+      const hindiVoice = voices.find(v =>
+        v.lang && v.lang.toLowerCase().startsWith("hi")
+      );
+
+      if (hindiVoice) utterance.voice = hindiVoice;
+
+      utterance.onstart = () => setStatus("Speaking...");
+      utterance.onend = () => setStatus("System Ready");
+      utterance.onerror = () => setStatus("System Ready");
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function showAnswer(text, shouldSpeak = true) {
+      $("assistantMessage").textContent = text;
+      setStatus("System Ready");
+      if (shouldSpeak) speak(text);
+    }
+
+    function openWebsite(url) {
+      const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+
+      if (!newWindow) {
+        showAnswer(
+          "Browser ne pop-up block kar diya. Browser settings mein " +
+          "is site ke pop-ups allow karke dobara try karein."
+        );
+        return false;
+      }
+
+      return true;
+    }
+
+    function basicCommand(raw) {
+      const text = raw.toLowerCase().trim();
+
+      if (
+        text.includes("help") ||
+        text.includes("madad") ||
+        text.includes("commands") ||
+        text.includes("kya kar sakte")
+      ) {
+        return "Main time aur date bata sakta hoon, YouTube ya Google " +
+          "khol sakta hoon, aur configured DeepSeek AI se sawaalon ke " +
+          "jawab de sakta hoon. Example: 'YouTube kholo' ya 'India ki " +
+          "capital kya hai?'";
+      }
+
+      if (
+        text.includes("radhe radhe") ||
+        text.includes("hello") ||
+        text.includes("namaste") ||
+        text.includes("pranam")
+      ) {
+        return "Radhe Radhe! Bataiye, main aapki kya madad karun?";
+      }
+
+      if (
+        text.includes("time") ||
+        text.includes("samay") ||
+        text.includes("kitne baje")
+      ) {
+        return "Abhi time hai " +
+          new Date().toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+      }
+
+      if (
+        text.includes("date") ||
+        text.includes("tarikh") ||
+        text.includes("tareekh") ||
+        text.includes("aaj ka din")
+      ) {
+        return "Aaj ki date hai " +
+          new Date().toLocaleDateString("hi-IN", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          });
+      }
+
+      if (text.includes("youtube")) {
+        openWebsite("https://www.youtube.com/");
+        return "YouTube kholne ki koshish kar raha hoon.";
+      }
+
+      if (
+        text.includes("google") &&
+        !text.includes("search") &&
+        !text.includes("dhundo") &&
+        !text.includes("khojo")
+      ) {
+        openWebsite("https://www.google.com/");
+        return "Google kholne ki koshish kar raha hoon.";
+      }
+
+      if (text.startsWith("search ") ||
+          text.startsWith("google search ") ||
+          text.startsWith("search for ") ||
+          text.startsWith("google par search ") ||
+          text.startsWith("google par ") ||
+          text.startsWith("dhundo ") ||
+          text.startsWith("khojo ")) {
+
+        let query = raw
+          .replace(/^(google par search|google search|search for|search|google par|dhundo|khojo)\s+/i, "")
+          .trim();
+
+        if (!query) {
+          return "Kya search karna hai? Sawaal ke baad topic bhi boliye.";
+        }
+
+        openWebsite(
+          "https://www.google.com/search?q=" + encodeURIComponent(query)
+        );
+
+        return "Google par search khol raha hoon: " + query;
+      }
+
+      if (text.includes("whatsapp")) {
+        openWebsite("https://web.whatsapp.com/");
+        return "WhatsApp Web kholne ki koshish kar raha hoon. " +
+          "Messages bhejne ke liye aapko khud action lena hoga.";
+      }
+
+      if (
+        text.includes("stop speaking") ||
+        text.includes("chup") ||
+        text.includes("bolna band") ||
+        text.includes("awaaz band")
+      ) {
+        window.speechSynthesis.cancel();
+        return "Theek hai, main ruk raha hoon.";
+      }
+
+      return null;
+    }
+
+    async function askAI(prompt) {
+      const key = $("apiKey").value.trim();
+      const endpoint = $("apiUrl").value.trim();
+      const model = $("model").value.trim() || "deepseek-chat";
+
+      if (!key) return null;
+
+      let parsedUrl;
+
+      try {
+        parsedUrl = new URL(endpoint);
+      } catch (error) {
+        throw new Error("API endpoint sahi URL nahi hai.");
+      }
+
+      if (
+        parsedUrl.protocol !== "https:" ||
+        parsedUrl.hostname !== "api.deepseek.com"
+      ) {
+        throw new Error(
+          "Is version mein sirf official api.deepseek.com HTTPS endpoint allowed hai."
+        );
+      }
+
+      const messages = [
+        ...conversation,
+        { role: "user", content: prompt }
+      ];
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+
+      let response;
+
+      try {
+        response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + key
+          },
+          body: JSON.stringify({
+            model: model,
+            temperature: 0.6,
+            messages: messages
+          }),
+          signal: controller.signal
+        });
+      } catch (error) {
+        if (error.name === "AbortError") {
+          throw new Error("AI ka response aane mein zyada time laga. Dobara try karein.");
+        }
+        throw new Error(
+          "AI server se connect nahi hua. Internet, API key aur provider settings check karein."
+        );
+      } finally {
+        clearTimeout(timeout);
+      }
+
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch (error) {
+        throw new Error("Server se valid jawab nahi mila.");
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data.error?.message || ("API error " + response.status)
+        );
+      }
+
+      const reply = data.choices?.[0]?.message?.content;
+
+      if (!reply) {
+        throw new Error("AI se jawab nahi mila.");
+      }
+
+      conversation.push(
+        { role: "user", content: prompt },
+        { role: "assistant", content: reply }
+      );
+
+      // Memory ko limited rakhein taaki request bahut badi na ho.
+      if (conversation.length > 13) {
+        conversation = [
+          systemMessage,
+          ...conversation.slice(-12)
+        ];
+      }
+
+      return reply;
+    }
+
+    async function handleCommand(raw) {
+      const prompt = raw.trim();
+      if (!prompt || isBusy) return;
+
+      isBusy = true;
+      $("userMessage").textContent = prompt;
+      $("assistantMessage").textContent = "Soch raha hoon...";
+      setStatus("Processing...");
+
+      try {
+        const localAnswer = basicCommand(prompt);
+
+        if (localAnswer !== null) {
+          showAnswer(localAnswer);
+          return;
+        }
+
+        const aiAnswer = await askAI(prompt);
+
+        if (aiAnswer) {
+          showAnswer(aiAnswer);
+        } else {
+          showAnswer(
+            "Ye AI sawaal hai, lekin API key set nahi hai. " +
+            "Neeche AI Settings mein apni DeepSeek API key add karein. " +
+            "Filhaal Time, Date, YouTube aur Google commands use kar sakte hain.",
+            false
+          );
+        }
+      } catch (error) {
+        showAnswer("Maaf kijiye: " + error.message, false);
+      } finally {
+        isBusy = false;
+        setStatus("System Ready");
+      }
+    }
+
+    function startListening() {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        showAnswer(
+          "Is browser mein voice recognition available nahi hai. " +
+          "OnePlus par Chrome mein website kholkar try karein, " +
+          "ya neeche text box se command likhein."
+        );
+        return;
+      }
+
+      if (isListening) {
+        try { recognition.stop(); } catch (error) {}
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.lang = "hi-IN";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = () => {
+        isListening = true;
+        setStatus("Listening...", true);
+        $("hint").textContent = "Haan, boliye... main sun raha hoon.";
+        $("micBtn").textContent = "🎙️ Listening...";
+      };
+
+      recognition.onresult = event => {
+        const transcript = event.results[0][0].transcript;
+        $("userInput").value = transcript;
+        handleCommand(transcript);
+      };
+
+      recognition.onerror = event => {
+        let message = "Voice recognition mein problem hui.";
+
+        if (event.error === "not-allowed") {
+          message = "Microphone permission allow karein, phir dobara try karein.";
+        } else if (event.error === "no-speech") {
+          message = "Awaaz sunai nahi di. Mic dabakar phir se boliye.";
+        } else if (event.error === "network") {
+          message = "Voice recognition ke liye internet connection check karein.";
+        }
+
+        $("hint").textContent = message;
+      };
+
+      recognition.onend = () => {
+        isListening = false;
+        $("orb").classList.remove("listening");
+        $("micBtn").textContent = "🎙️ Tap to Speak";
+        setStatus("System Ready");
+      };
+
+      try {
+        recognition.start();
+      } catch (error) {
+        isListening = false;
+        showAnswer("Mic dobara start nahi hua. Kuch seconds baad try karein.");
+      }
+    }
+
+    $("micBtn").addEventListener("click", startListening);
+
+    $("stopBtn").addEventListener("click", () => {
+      if (recognition && isListening) {
+        try { recognition.stop(); } catch (error) {}
+      }
+
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      setStatus("System Ready");
+      $("hint").textContent = "Voice ruk gayi.";
+    });
+
+    $("greetBtn").addEventListener("click", () => {
+      handleCommand("Radhe Radhe");
+    });
+
+    $("helpBtn").addEventListener("click", () => {
+      handleCommand("Meri madad karo");
+    });
+
+    $("sendBtn").addEventListener("click", () => {
+      const value = $("userInput").value.trim();
+      if (value) handleCommand(value);
+    });
+
+    $("userInput").addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        $("sendBtn").click();
+      }
+    });
+
+    document.querySelectorAll("[data-command]").forEach(button => {
+      button.addEventListener("click", () => {
+        const command = button.dataset.command;
+        $("userInput").value = command;
+        handleCommand(command);
+      });
+    });
+
+    $("saveBtn").addEventListener("click", () => {
+      const endpoint = $("apiUrl").value.trim();
+      const key = $("apiKey").value.trim();
+      const model = $("model").value.trim() || "deepseek-chat";
+
+      try {
+        const url = new URL(endpoint);
+
+        if (
+          url.protocol !== "https:" ||
+          url.hostname !== "api.deepseek.com"
+        ) {
+          throw new Error("Official DeepSeek HTTPS endpoint hi use karein.");
+        }
+
+        if (!key) {
+          throw new Error("Pehle API key enter karein.");
+        }
+
+        localStorage.setItem("rr_api_url", endpoint);
+        localStorage.setItem("rr_api_key", key);
+        localStorage.setItem("rr_model", model);
+
+        $("settingsStatus").textContent =
+          "Settings is browser mein save ho gayi hain.";
+
+        showAnswer("Radhe Radhe! AI settings save ho gayi hain.");
+      } catch (error) {
+        $("settingsStatus").textContent = error.message;
+      }
+    });
+
+    $("clearBtn").addEventListener("click", () => {
+      localStorage.removeItem("rr_api_key");
+      $("apiKey").value = "";
+      $("settingsStatus").textContent =
+        "API key is browser se delete kar di gayi hai.";
+
+      conversation = [systemMessage];
+      showAnswer("API key clear ho gayi hai. Basic commands abhi bhi kaam karenge.");
+    });
+
+    // Optional PWA service worker.
+    if ("serviceWorker" in navigator && location.protocol === "https:") {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {
+          // App service worker ke bina bhi open ho sakti hai.
+        });
+      });
+    }
+  </script>
 </body>
 </html>
